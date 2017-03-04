@@ -21,4 +21,5 @@ result=`load | dmenu -p "Select/create task" | cut -d '	' -f2-`
 test -z "$result" && exit 0
 
 touch "$todir/$result"
+#TODO: Use sane install directories
 exec ~/local/share/todo/singletask "$result"
