@@ -1,7 +1,7 @@
 #!/bin/sh
 # Write/remove a task to do later.
 
-todir=$XDG_CACHE_HOME/todo
+todir=$XDG_DATA_HOME/todo
 load() {
   # count matches with grep vs line count 
 	find "$todir" -not -path '*/\.*' -type f | while read title; do
@@ -22,4 +22,4 @@ test -z "$result" && exit 0
 
 touch "$todir/$result"
 #TODO: Use sane install directories
-exec ~/local/share/todo/singletask "$result"
+exec /usr/local/share/todo/singletask "$result"

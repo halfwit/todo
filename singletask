@@ -1,6 +1,6 @@
 #!/bin/sh
 # Write/remove a task to do later.
-TASKFILE="$XDG_CACHE_HOME/todo/$1"
+TASKFILE="$XDG_DATA_HOME/todo/$1"
 
 while true; do
 	result=`dmenu -p "Add new task or toggle" < "$TASKFILE"`
