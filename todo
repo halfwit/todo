@@ -4,20 +4,21 @@
 todir=$XDG_DATA_HOME/todo
 load() {
   # count matches with grep vs line count 
-	find "$todir" -not -path '*/\.*' -type f | while read title; do
+  	cd "$todir" || exit 1
+	find  -not -path '*/\.*' -type f | while read title; do
 		if ! test -s "$title"; then
 			rm "$title"
 			continue
 		fi
-		match=`grep -c "(x)" "$title"`
-		total=`wc -l "$title" | awk '{print $1}'`
-		total=`echo "100*$match/$total" | bc`
+		match="`grep -c "(x)" "$title"`"
+		total="`wc -l "$title" | awk '{print $1}'`"
+		total="`echo "100*$match/$total" | bc`"
 		printf '%s\t%s\n' "$total%" "`basename "$title"`"
 	done
 }
 
 ## Main
-result=`load | dmenu -p "Select/create task" | cut -d '	' -f2-`
+result="`load | dmenu -p "Select/create task" | cut -d '	' -f2-`"
 test -z "$result" && exit 0
 
 touch "$todir/$result"
