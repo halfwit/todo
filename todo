@@ -12,14 +12,14 @@ load() {
 		fi
 		match="`grep -c "(x)" "$title"`"
 		total="`wc -l "$title" | awk '{ print "100*'$match'/" $1 }' | bc`"
-		printf '[%.2d%%]-%s\n' "$total" "`basename "$title"`"
+		printf '%.2d%% - %s\n' "$total" "`basename "$title"`"
 	done
 }
 
 ## Main
-result="`load | dmenu -p "Select/create task" | cut -d '-' -f2-`"
+result="`load | dmenu -p "Select/create task"`"
 test -z "$result" && exit 0
 
 touch "$todir/$result"
 #TODO: Use sane install directories
-exec /usr/local/share/todo/singletask "$result"
+exec /usr/local/share/todo/singletask "${result##*\- }"
