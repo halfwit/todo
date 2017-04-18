@@ -1,24 +1,23 @@
 #!/bin/sh
 # Write/remove a task to do later.
 
-todir=$XDG_DATA_HOME/todo
+todir="$XDG_DATA_HOME/todo"
 load() {
-  # count matches with grep vs line count 
+	# count matches with grep vs line count
   	cd "$todir" || exit 1
-	find  -not -path '*/\.*' -type f | while read title; do
+	find ./ \! -path '*/\.*' \! -name 'singletask' -type f | while read -r title; do
 		if ! test -s "$title"; then
 			rm "$title"
 			continue
 		fi
 		match="`grep -c "(x)" "$title"`"
-		total="`wc -l "$title" | awk '{print $1}'`"
-		total="`echo "100*$match/$total" | bc`"
-		printf '%s\t%s\n' "$total%" "`basename "$title"`"
+		total="`wc -l "$title" | awk '{ print "100*'$match'/" $1 }' | bc`"
+		printf '[%d%%]-%s\n' "$total" "`basename "$title"`"
 	done
 }
 
 ## Main
-result="`load | dmenu -p "Select/create task" | cut -d '	' -f2-`"
+result="`load | dmenu -p "Select/create task" | cut -d '-' -f2-`"
 test -z "$result" && exit 0
 
 touch "$todir/$result"
