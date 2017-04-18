@@ -12,7 +12,7 @@ load() {
 		fi
 		match="`grep -c "(x)" "$title"`"
 		total="`wc -l "$title" | awk '{ print "100*'$match'/" $1 }' | bc`"
-		printf '[%d%%]-%s\n' "$total" "`basename "$title"`"
+		printf '[%.2d%%]-%s\n' "$total" "`basename "$title"`"
 	done
 }
 
