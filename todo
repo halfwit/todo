@@ -1,20 +1,14 @@
 #!/bin/sh
-# Write/remove a task to do later.
-
 todir="$XDG_CACHE_HOME/todo"
+
 load() {
-	# count matches with grep vs line count
-  	cd "$todir" || exit 1
-	find ./ \! -path '*/\.*' \! -name 'singletask' -type f | while read -r title; do
-		if ! test -s "$title"; then
-			rm "$title"
-			continue
-		fi
-		match="`grep -c "(x)" "$title"`"
-		total="`wc -l "$title" | awk '{ print "100*'$match'/" $1 }' | bc`"
-		printf '%.2d%% - %s\n' "$total" "`basename "$title"`"
+	ls "$todir" | while read -r title; do		
+		match="$(grep -c "(x)" "$todir/$title")"
+		# Calculate percentage of lines with completed tasks
+		total="$(wc -l "$todir/$title" | awk '{ print "100*'$match'/" $1 }' | bc)"
+		printf '%.2d%% - %s\n' "$total" "$title"
 	done
 }
 
-## Main
+# Narrow by selection and open in single task handler
 load | sort -r | dmenu -p "Select/create task" | sed 's/.* - //' | /usr/local/share/todo/singletask

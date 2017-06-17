@@ -3,6 +3,7 @@
 
 read -r file || exit 0
 TASKFILE="$XDG_CACHE_HOME/todo/$file"
+touch "$TASKFILE"
 
 while true; do
 	result=`dmenu -p "Add new task or toggle" < "$TASKFILE"`
