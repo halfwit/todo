@@ -5,8 +5,8 @@ read -r file || exit 0
 TASKFILE="$XDG_CACHE_HOME/todo/$file"
 touch "$TASKFILE"
 
-while true; do
-	result=`dmenu -p "Add new task or toggle" < "$TASKFILE"`
+while :; do
+	result=`dmenu -p "$file: add/toggle task" < "$TASKFILE"`
 	sub=`printf "$result" | sed -e 's/( )/(x)/' -e t -e 's/(x)/( )/' -e t`
 	# Return to main program on exit
 	test -z "$result" && exec todo
@@ -16,3 +16,4 @@ while true; do
 		*)       printf '%s\n' "( ) $result" >> "$TASKFILE" ;;
 	esac
 done
+

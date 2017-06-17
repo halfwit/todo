@@ -1,6 +1,10 @@
 #!/bin/sh
 todir="$XDG_CACHE_HOME/todo"
 
+# If we have data on stdin, use it
+test -p /dev/stdin && exec /usr/local/share/todo/singletask < /dev/stdin 
+
+
 load() {
 	ls "$todir" | while read -r title; do		
 		match="$(grep -c "(x)" "$todir/$title")"
@@ -9,6 +13,5 @@ load() {
 		printf '%.2d%% - %s\n' "$total" "$title"
 	done
 }
-
 # Narrow by selection and open in single task handler
 load | sort -r | dmenu -p "Select/create task" | sed 's/.* - //' | /usr/local/share/todo/singletask
